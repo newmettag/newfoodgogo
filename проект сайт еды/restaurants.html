@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodGoGo — Restaurants</title>
+  <link rel="stylesheet" href="/Style.css">
+</head>
+<body>
+  <meta name="description" content="FoodGoGo — онлайн доставка еды. Рестораны, блюда, корзина, заказы и оплата. Удобно и быстро.">
+<meta name="keywords" content="еда, доставка, рестораны, FoodGoGo, заказать еду, онлайн заказ, доставка еды Алматы">
+<meta name="author" content="FoodGoGo Team">
+
+<header class="header">
+  <h1 class="header__title">FoodGoGo — Restaurants</h1>
+</header>
+  <nav class="nav">
+  <a class="nav__link" href="index.html">Home</a>
+  <a class="nav__link" href="restaurants.html">Restaurants</a>
+  <a class="nav__link" href="cart.html">
+    Cart <span class="cart-indicator" id="cartCount"></span>
+  </a>
+  <a class="nav__link" href="orders.html">My Orders</a>
+  <a class="nav__link" href="checkout.html">Checkout</a>
+  <a class="nav__link" href="account.html">Account</a>
+  <a class="nav__link" href="about.html">About</a>
+</nav>
+<main class="main">
+  <div class="search-box">
+    <input type="text" id="search" class="search-box__input" placeholder="🔍 Search restaurants...">
+  </div>
+
+  <div class="restaurant-list" id="restaurant-list">
+    <div class="restaurant" onclick="openModal('alashfood')">
+      <img src="https://weproject.media/upload/medialibrary/fa5/fa58c08f87d6d238a1cf04aebf1970cf.jpg" 
+           alt="alashfood" class="restaurant__image">
+      <div class="restaurant__content">
+        <h2 class="restaurant__title">alashfood</h2>
+        <p class="restaurant__description">Traditional Kazakh dishes and drinks</p>
+      </div>
+    </div>
+
+    <div class="restaurant" onclick="openModal('qazaqKitchen')">
+      <img src="https://the-steppe.com/wp-content/uploads/2018/11/ff960664e99be4e6dd7c2e6f98c273d8.jpg" 
+           alt="qazaqKitchen" class="restaurant__image">
+      <div class="restaurant__content">
+        <h2 class="restaurant__title">qazaqKitchen</h2>
+        <p class="restaurant__description">Homemade food in a modern style</p>
+      </div>
+    </div>
+
+    <div class="restaurant" onclick="openModal('beshGoGo')">
+      <img src="https://s.zagranitsa.com/images/articles/4018/870x486/71d213625178497fd66fdf4d021b361e.jpg?1468398411" 
+           alt="beshGoGo" class="restaurant__image">
+      <div class="restaurant__content">
+        <h2 class="restaurant__title">beshGoGo</h2>
+        <p class="restaurant__description">Kazy, kebabs, and meat dishes</p>
+      </div>
+    </div>
+
+    <div class="restaurant" onclick="openModal('YURTA')">
+      <img src="https://weproject.media/upload/medialibrary/b36/b360c1ae93be571a817c2fe2c9508f9a.jpeg" 
+           alt="YURTA" class="restaurant__image">
+      <div class="restaurant__content">
+        <h2 class="restaurant__title">YURTA</h2>
+        <p class="restaurant__description">National desserts and drinks</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modal" id="modal">
+  <div class="modal__content" id="modal-content">
+    <button class="modal__close-btn" onclick="closeModal()">Close</button>
+    <h2 class="modal__title" id="modal-title"></h2>
+    <p class="modal__description" id="modal-description"></p>
+    <h3 class="modal__subtitle">Menu:</h3>
+    <ul class="modal__menu" id="modal-menu"></ul>
+    <h3 class="modal__subtitle">Location:</h3>
+    <iframe class="modal__map" id="modal-map"></iframe>
+  </div>
+</div>
+<script>
+const restaurants = {
+  "alashfood": {
+    description: "Traditional Kazakh food and drinks.",
+    menu: [
+      {name: "Beshbarmak", price: "3000 ₸", image: "https://img.freepik.com/premium-phohttpsto/national-kazakh-dish-beshbarmak_118631-1107.jpg"},
+      {name: "Kymyz", price: "1000 ₸", image: "https://www.napitkimira.com/upload/medialibrary/7c0/7c00808d774a60a5c3c731335f984fb2.jpg"}
+    ],
+    map: "https://www.google.com/maps/embed?...",
+  },
+  "qazaqKitchen": {
+    description: "Modern style homemade Kazakh food.",
+    menu: [
+      {name: "Shashlik", price: "2200 ₸", image: "https://www.chefmarket.ru/blog/wp-content/uploads/2019/07/kebabhome-e1563827694229.jpg"}
+    ],
+    map: "https://www.google.com/maps/embed?...",
+  },
+  "beshGoGo": {
+    description: "Kazy, kebabs, and other meat dishes.",
+    menu: [
+      {name: "Kazy", price: "2000 ₸", image: "https://www.kupaty.com/upload/resize_cache/iblock/87a/421_9999_1/1404558765.jpg"},
+    ],
+    map: "https://www.google.com/maps/embed?...",
+  },
+  "YURTA": {
+    description: "National Kazakh desserts and drinks.",
+    menu: [
+      {name: "Baursaks", price: "800 ₸", image: "https://cdn.azbyka.ru/recept/wp-content/uploads/2021/01/kazakh-traditional-cuisine-baursaks-fried-dough-1.jpg"},
+    ],
+    map: "https://www.google.com/maps/embed?...",
+  }
+};
+function openModal(name) {
+  const data = restaurants[name];
+  document.getElementById("modal-title").textContent = name;
+  document.getElementById("modal-description").textContent = data.description;
+
+  let menuList = document.getElementById("modal-menu");
+  menuList.innerHTML = "";
+  data.menu.forEach(item => {
+    let li = document.createElement("li");
+    li.innerHTML = `<img src="${item.image}" alt="${item.name}"> ${item.name} — ${item.price}`;
+    menuList.appendChild(li);
+  });
+  document.getElementById("modal-map").src = data.map;
+  document.getElementById("modal").style.display = "flex";
+}
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+document.getElementById('search').addEventListener('input', function() {
+  let query = this.value.toLowerCase();
+  let restaurants = document.querySelectorAll('.restaurant');
+  restaurants.forEach(res => {
+    let name = res.querySelector('h2').textContent.toLowerCase();
+    let desc = res.querySelector('p').textContent.toLowerCase();
+    res.style.display = (name.includes(query) || desc.includes(query)) ? 'block' : 'none';
+  });
+});
+function updateCartIndicator() {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  let indicator = document.getElementById('cartCount');
+
+  if (count > 0) {
+    indicator.style.display = "inline-block";
+    indicator.textContent = count;
+  } else {
+    indicator.style.display = "none";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", updateCartIndicator);
+</script>
+<footer class="footer">
+  <div class="footer__container">
+    <p>&copy; 2025 FoodGoGo. All rights reserved.</p>
+    <nav class="footer__nav">
+      <a href="about.html">About</a>
+      <a href="account.html">Account</a>
+    </nav>
+    <div class="footer__contacts">
+      <p>📞 +7 (747) 708 07 32</p>
+      <p>✉️ arnuredellbaev@gmail.com</p>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>
