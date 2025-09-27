@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodGoGo — Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <meta name="description" content="FoodGoGo — онлайн доставка еды. Рестораны, блюда, корзина, заказы и оплата. Удобно и быстро.">
+<meta name="keywords" content="еда, доставка, рестораны, FoodGoGo, заказать еду, онлайн заказ, доставка еды Алматы">
+<meta name="author" content="FoodGoGo Team">
+<body class="page">
+<header class="header">
+  <div class="header__title">FoodGoGo — Account</div>
+</header>
+<nav class="nav">
+  <a class="nav__link" href="index.html">Home</a>
+  <a class="nav__link" href="restaurants.html">Restaurants</a>
+  <a class="nav__link" href="cart.html">
+    Cart <span class="cart-indicator" id="cartCount"></span>
+  </a>
+  <a class="nav__link" href="orders.html">My Orders</a>
+  <a class="nav__link" href="checkout.html">Checkout</a>
+  <a class="nav__link" href="account.html">Account</a>
+  <a class="nav__link" href="about.html">About</a>
+</nav>
+<main class="account">
+  <div class="account__container">
+    <div class="account__tabs">
+      <button class="account__tab-btn account__tab-btn--active" onclick="showTab('login')">Login</button>
+      <button class="account__tab-btn" onclick="showTab('register')">Register</button>
+      <button class="account__tab-btn" onclick="showTab('profile')">Profile</button>
+    </div>
+
+    <div id="login" class="account__tab-content account__tab-content--active">
+      <h2 class="account__title">Login</h2>
+      <input class="account__input" type="email" placeholder="Email" id="loginEmail" required>
+      <input class="account__input" type="password" placeholder="Password" id="loginPassword" required>
+      <button class="account__btn" onclick="login()">Login</button>
+    </div>
+
+    <div id="register" class="account__tab-content">
+      <h2 class="account__title">Register</h2>
+      <input class="account__input" type="text" placeholder="Name" id="regName" required>
+      <input class="account__input" type="email" placeholder="Email" id="regEmail" required>
+      <input class="account__input" type="password" placeholder="Password" id="regPassword" required>
+      <button class="account__btn" onclick="register()">Sign Up</button>
+    </div>
+
+    <div id="profile" class="account__tab-content">
+      <h2 class="account__title">Profile</h2>
+      <p class="account__info"><strong>Name:</strong> <span id="profileName">—</span></p>
+      <p class="account__info"><strong>Email:</strong> <span id="profileEmail">—</span></p>
+      <button class="account__btn account__btn--logout" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function showTab(tabId) {
+    document.querySelectorAll('.account__tab-btn').forEach(btn => btn.classList.remove('account__tab-btn--active'));
+    document.querySelectorAll('.account__tab-content').forEach(content => content.classList.remove('account__tab-content--active'));
+    document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('account__tab-btn--active');
+    document.getElementById(tabId).classList.add('account__tab-content--active');
+  }
+
+  function register() {
+    let name = document.getElementById("regName").value.trim();
+    let email = document.getElementById("regEmail").value.trim();
+    let password = document.getElementById("regPassword").value.trim();
+    if (!name || !email || !password) {
+      alert("Please fill in all fields!");
+      return;
+    }
+    localStorage.setItem("user", JSON.stringify({name, email, password}));
+    alert("Registration successful!");
+    showTab("login");
+  }
+
+  function login() {
+    let email = document.getElementById("loginEmail").value.trim();
+    let password = document.getElementById("loginPassword").value.trim();
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.email === email && user.password === password) {
+      alert("Login successful!");
+      document.getElementById("profileName").innerText = user.name;
+      document.getElementById("profileEmail").innerText = user.email;
+      showTab("profile");
+    } else {
+      alert("Invalid email or password!");
+    }
+  }
+
+  function logout() {
+    showTab("login");
+  }
+
+  function updateCartCount() {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let badge = document.getElementById('cart-count');
+    if (cart.length > 0) {
+      badge.style.display = 'inline-block';
+      badge.textContent = cart.length;
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  window.onload = updateCartCount;
+function updateCartIndicator() {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  let indicator = document.getElementById('cartCount');
+
+  if (count > 0) {
+    indicator.style.display = "inline-block";
+    indicator.textContent = count;
+  } else {
+    indicator.style.display = "none";
+  }
+}
+document.addEventListener("DOMContentLoaded", updateCartIndicator);
+</script>
+<footer class="footer">
+  <div class="footer__container">
+    <p>&copy; 2025 FoodGoGo. All rights reserved.</p>
+    <nav class="footer__nav">
+      <a href="about.html">About</a>
+      <a href="account.html">Account</a>
+    </nav>
+    <div class="footer__contacts">
+      <p>📞 +7 (747) 708 07 32</p>
+      <p>✉️ arnuredellbaev@gmail.com</p>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>

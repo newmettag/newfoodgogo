@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodGoGo — Dish Catalog</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ <meta name="description" content="FoodGoGo — онлайн доставка еды. Рестораны, блюда, корзина, заказы и оплата. Удобно и быстро.">
+<meta name="keywords" content="еда, доставка, рестораны, FoodGoGo, заказать еду, онлайн заказ, доставка еды Алматы">
+<meta name="author" content="FoodGoGo Team">
+<header class="header">
+  <div class="header__title">FoodGoGo — Dish Catalog</div>
+</header>
+<nav class="nav">
+  <a class="nav__link" href="index.html">Home</a>
+  <a class="nav__link" href="restaurants.html">Restaurants</a>
+  <a class="nav__link" href="cart.html">
+    Cart <span class="cart-indicator" id="cartCount"></span>
+  </a>
+  <a class="nav__link" href="orders.html">My Orders</a>
+  <a class="nav__link" href="checkout.html">Checkout</a>
+  <a class="nav__link" href="account.html">Account</a>
+  <a class="nav__link" href="about.html">About</a>
+</nav>
+<div class="search-bar">
+  <input type="text" class="search-bar__input" id="search" placeholder="🔍 Search for dishes...">
+</div>
+
+<main class="dish-container" id="dish-list">
+
+  <div class="dish">
+    <img src="https://img.freepik.com/premium-photo/national-kazakh-dish-beshbarmak_118631-1107.jpg" alt="Beshbarmak" class="dish__image">
+    <div class="dish__content">
+      <h2 class="dish__title">Beshbarmak</h2>
+      <p class="dish__price">2500 ₸</p>
+      <button class="dish__button" onclick="addToCart('Beshbarmak', 2500, 'alashfood')">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="dish">
+    <img src="https://www.kupaty.com/upload/resize_cache/iblock/87a/421_9999_1/1404558765.jpg" alt="Kazy" class="dish__image">
+    <div class="dish__content">
+      <h2 class="dish__title">Kazy</h2>
+      <p class="dish__price">3000 ₸</p>
+      <button class="dish__button" onclick="addToCart('Kazy', 3000, 'YURTA')">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="dish">
+    <img src="https://www.napitkimira.com/upload/medialibrary/7c0/7c00808d774a60a5c3c731335f984fb2.jpg" alt="Kumis" class="dish__image">
+    <div class="dish__content">
+      <h2 class="dish__title">Kumis</h2>
+      <p class="dish__price">1200 ₸</p>
+      <button class="dish__button" onclick="addToCart('Kumis', 1200, 'beshGoGo')">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="dish">
+    <img src="https://cdn.azbyka.ru/recept/wp-content/uploads/2021/01/kazakh-traditional-cuisine-baursaks-fried-dough-1.jpg" alt="Baursaks" class="dish__image">
+    <div class="dish__content">
+      <h2 class="dish__title">Baursaks</h2>
+      <p class="dish__price">500 ₸</p>
+      <button class="dish__button" onclick="addToCart('Baursaks', 500, 'qazaqKitchen')">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="dish">
+    <img src="https://www.chefmarket.ru/blog/wp-content/uploads/2019/07/kebabhome-e1563827694229.jpg" alt="Lamb Shashlik" class="dish__image">
+    <div class="dish__content">
+      <h2 class="dish__title">Lamb Shashlik</h2>
+      <p class="dish__price">3500 ₸</p>
+      <button class="dish__button" onclick="addToCart('Lamb Shashlik', 3500, 'alashfood')">Add to Cart</button>
+    </div>
+  </div>
+</main>
+<script>
+function addToCart(name, price, restaurant) {
+  let dish = event.target.closest('.dish');
+  let image = dish.querySelector('.dish__image').src;
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  // Проверка на количество
+  let existing = cart.find(item => item.name === name && item.restaurant === restaurant);
+  if (existing) {
+    existing.quantity = (existing.quantity || 1) + 1;
+  } else {
+    cart.push({ name, price, restaurant, image, quantity: 1 });
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+}
+
+function updateCartCount() {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  let badge = document.getElementById('cartCount');
+
+  if (count > 0) {
+    badge.style.display = 'inline-block';
+    badge.textContent = count;
+    badge.style.background = 'red';
+    badge.style.color = 'white';
+    badge.style.padding = '2px 6px';
+    badge.style.borderRadius = '50%';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+document.addEventListener("DOMContentLoaded", updateCartCount);
+document.getElementById('search').addEventListener('input', function() {
+  let query = this.value.toLowerCase();
+  let dishes = document.querySelectorAll('.dish');
+  dishes.forEach(dish => {
+    let name = dish.querySelector('.dish__title').textContent.toLowerCase();
+    dish.style.display = name.includes(query) ? 'block' : 'none';
+  });
+});
+</script>
+
+<footer class="footer">
+  <div class="footer__container">
+    <p>&copy; 2025 FoodGoGo. All rights reserved.</p>
+    <nav class="footer__nav">
+      <a href="about.html">About</a>
+    </nav>
+    <div class="footer__contacts">
+      <p>📞 +7 (747) 708 07 32</p>
+      <p>✉️ arnuredellbaev@gmail.com</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

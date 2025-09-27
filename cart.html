@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodGoGo — Cart</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <meta name="description" content="FoodGoGo — онлайн доставка еды. Рестораны, блюда, корзина, заказы и оплата. Удобно и быстро.">
+<meta name="keywords" content="еда, доставка, рестораны, FoodGoGo, заказать еду, онлайн заказ, доставка еды Алматы">
+<meta name="author" content="FoodGoGo Team">
+<meta name="description" content="FoodGoGo — онлайн доставка еды. Рестораны, блюда, корзина, заказы и оплата. Удобно и быстро.">
+<meta name="keywords" content="еда, доставка, рестораны, FoodGoGo, заказать еду, онлайн заказ, доставка еды Алматы">
+<meta name="author" content="FoodGoGo Team">
+<body class="page">
+<header class="header">
+  <div class="header__title">FoodGoGo — Cart</div>
+</header>
+<nav class="nav">
+  <a class="nav__link" href="index.html">Home</a>
+  <a class="nav__link" href="restaurants.html">Restaurants</a>
+  <a class="nav__link" href="cart.html">
+    Cart <span class="cart-indicator" id="cartCount"></span>
+  </a>
+  <a class="nav__link" href="orders.html">My Orders</a>
+  <a class="nav__link" href="checkout.html">Checkout</a>
+  <a class="nav__link" href="account.html">Account</a>
+  <a class="nav__link" href="about.html">About</a>
+</nav>
+<main class="cart">
+  <h2 class="cart__title">Your Cart</h2>
+  <table class="cart__table" id="cart-table">
+    <thead class="cart__table-head">
+      <tr class="cart__table-row">
+        <th class="cart__table-cell">Dish</th>
+        <th class="cart__table-cell">Price</th>
+        <th class="cart__table-cell">Restaurant</th>
+        <th class="cart__table-cell">Action</th>
+      </tr>
+    </thead>
+    <tbody class="cart__table-body"></tbody>
+  </table>
+  <p class="cart__total" id="total-price"></p>
+</main>
+<script>
+function renderCart() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const tbody = document.querySelector('.cart__table-body');
+  tbody.innerHTML = "";
+  let total = 0;
+  cart.forEach((item, i) => {
+    total += item.price * (item.quantity || 1);
+    let tr = document.createElement('tr');
+    tr.classList.add('cart__table-row');
+    tr.innerHTML = `
+      <td class="cart__table-cell">${item.name}</td>
+      <td class="cart__table-cell">${item.price} ₸</td>
+      <td class="cart__table-cell">${item.restaurant}</td>
+      <td class="cart__table-cell">
+        <button class="cart__remove-btn" onclick="removeItem(${i})">Remove</button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('total-price').textContent = "Total: " + total + " ₸";
+  let indicator = document.getElementById('cartCount');
+  if (cart.length > 0) {
+    indicator.style.display = "inline-block";
+    indicator.textContent = cart.length;
+  } else {
+    indicator.style.display = "none";
+  }
+}
+
+function removeItem(index) {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  cart.splice(index, 1);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  renderCart();
+}
+window.onload = renderCart;
+</script>
+
+<footer class="footer">
+  <div class="footer__container">
+    <p>&copy; 2025 FoodGoGo. All rights reserved.</p>
+    <nav class="footer__nav">
+      <a href="about.html">About</a>
+      <a href="account.html">Account</a>
+    </nav>
+    <div class="footer__contacts">
+      <p>📞 +7 (747) 708 07 32</p>
+      <p>✉️ arnuredellbaev@gmail.com</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

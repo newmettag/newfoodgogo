@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodGoGo — My Orders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <meta name="description" content="FoodGoGo — онлайн доставка еды. Рестораны, блюда, корзина, заказы и оплата. Удобно и быстро.">
+<meta name="keywords" content="еда, доставка, рестораны, FoodGoGo, заказать еду, онлайн заказ, доставка еды Алматы">
+<meta name="author" content="FoodGoGo Team">
+<body class="page">
+<header class="header">
+  <div class="header__title">FoodGoGo — My Orders</div>
+</header>
+<nav class="nav">
+  <a class="nav__link" href="index.html">Home</a>
+  <a class="nav__link" href="restaurants.html">Restaurants</a>
+  <a class="nav__link" href="cart.html">
+    Cart <span class="cart-indicator" id="cartCount"></span>
+  </a>
+  <a class="nav__link" href="orders.html">My Orders</a>
+  <a class="nav__link" href="checkout.html">Checkout</a>
+  <a class="nav__link" href="account.html">Account</a>
+  <a class="nav__link" href="about.html">About</a>
+</nav>
+<main class="orders">
+  <h2 class="orders__title">Your Orders</h2>
+  <div id="orders-list" class="orders__list"></div>
+</main>
+<script>
+function loadOrders() {
+  let orders = JSON.parse(localStorage.getItem('orders')) || [];
+  let list = document.getElementById("orders-list");
+  list.innerHTML = "";
+  if (orders.length === 0) {
+    list.innerHTML = "<p class='orders__empty'>You don't have any orders yet.</p>";
+    return;
+  }
+  orders.forEach((order, index) => {
+    let div = document.createElement("div");
+    div.classList.add("order");
+    div.innerHTML = `
+      <h3 class="order__title">Order from ${order.date}</h3>
+      <p class="order__info"><b>Name:</b> ${order.name}</p>
+      <p class="order__info"><b>Phone:</b> ${order.phone}</p>
+      <p class="order__info"><b>Address:</b> ${order.address}</p>
+      <p class="order__subtitle"><b>Dishes:</b></p>
+      <ul class="order__items">
+        ${order.cart.map(item => `
+          <li class="order__item">
+            <img class="order__item-img" src="${item.image}" alt="${item.name}">
+            <span class="order__item-text">${item.name} (${item.restaurant}) — ${item.price} ₸ × ${item.quantity || 1}</span>
+          </li>
+        `).join("")}
+      </ul>
+      <button class="order__delete-btn" onclick="deleteOrder(${index})">Delete Order</button>
+    `;
+    list.appendChild(div);
+  });
+}
+function deleteOrder(index) {
+  let orders = JSON.parse(localStorage.getItem('orders')) || [];
+  if (!confirm("Are you sure you want to delete this order?")) return;
+  orders.splice(index, 1);
+  localStorage.setItem('orders', JSON.stringify(orders));
+  loadOrders();
+}
+window.onload = loadOrders;
+function updateCartIndicator() {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  let indicator = document.getElementById('cartCount');
+
+  if (count > 0) {
+    indicator.style.display = "inline-block";
+    indicator.textContent = count;
+  } else {
+    indicator.style.display = "none";
+  }
+}
+document.addEventListener("DOMContentLoaded", updateCartIndicator);
+
+</script>
+<footer class="footer">
+  <div class="footer__container">
+    <p>&copy; 2025 FoodGoGo. All rights reserved.</p>
+    <nav class="footer__nav">
+      <a href="about.html">About</a>
+      <a href="account.html">Account</a>
+    </nav>
+    <div class="footer__contacts">
+      <p>📞 +7 (747) 708 07 32</p>
+      <p>✉️ arnuredellbaev@gmail.com</p>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>

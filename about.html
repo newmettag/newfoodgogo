@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodGoGo — About</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<meta name="description" content="FoodGoGo — онлайн доставка еды. Рестораны, блюда, корзина, заказы и оплата. Удобно и быстро.">
+<meta name="keywords" content="еда, доставка, рестораны, FoodGoGo, заказать еду, онлайн заказ, доставка еды Алматы">
+<meta name="author" content="FoodGoGo Team">
+<body class="page">
+<header class="header">
+  <div class="header__title">FoodGoGo — About</div>
+</header>
+<nav class="nav">
+  <a class="nav__link" href="index.html">Home</a>
+  <a class="nav__link" href="restaurants.html">Restaurants</a>
+  <a class="nav__link" href="cart.html">
+    Cart <span class="cart-indicator" id="cartCount"></span>
+  </a>
+  <a class="nav__link" href="orders.html">My Orders</a>
+  <a class="nav__link" href="checkout.html">Checkout</a>
+  <a class="nav__link" href="account.html">Account</a>
+  <a class="nav__link" href="about.html">About</a>
+</nav>
+<main class="about">
+  <section class="about__section">
+    <h2 class="about__title">About the Site</h2>
+    <p class="about__text">
+      FoodGoGo is a modern food delivery service offering dishes from different cuisines around the world.
+      We connect you with the best local restaurants and make your favorite meals available anytime.
+    </p>
+  </section>
+  <section class="about__section about__contacts">
+    <h2 class="about__title">Contacts</h2>
+    <ul class="about__contact-list">
+      <li class="about__contact-item">📞 Phone: +7 (747) 708 07 32</li>
+      <li class="about__contact-item">📧 Email: arnuredellbaev@gmail.com</li>
+      <li class="about__contact-item">🏢 Office Address: 52 Abay Street, Almaty</li>
+    </ul>
+    <div class="about__socials">
+      <a class="about__social-link" href="https://t.me/Newmeagtrmt" target="_blank">Telegram</a>
+      <a class="about__social-link" href="https://www.instagram.com/newmeagrtmt" target="_blank">Instagram</a>
+    </div>
+    <div class="about__map">
+      <iframe src="https://www.google.com/maps/embed?..." allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <section class="about__section about__support">
+    <h2 class="about__title">Customer Support</h2>
+    <p class="about__text">
+      If you have questions about orders, payment, or using the website, our support team is always ready to assist you.
+    </p>
+    <form class="about__form" id="contactForm">
+      <input class="about__input" type="text" id="name" placeholder="Your Name" required>
+      <input class="about__input" type="email" id="email" placeholder="Email" required>
+      <textarea class="about__textarea" id="message" rows="4" placeholder="Your Message" required></textarea>
+      <input class="about__btn" type="submit" value="Send">
+    </form>
+    <p class="about__form-message" id="formMessage"></p>
+  </section>
+</main>
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const message = document.getElementById('message').value.trim();
+  const formMessage = document.getElementById('formMessage');
+  const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/i;
+
+  if (!emailPattern.test(email)) {
+    formMessage.textContent = "⚠️ Please enter a valid email!";
+    formMessage.style.color = "red";
+    return;
+  }
+  if (!name || !message) {
+    formMessage.textContent = "⚠️ Please fill in all fields!";
+    formMessage.style.color = "red";
+    return;
+  }
+  formMessage.textContent = "✅ Thank you! Your message has been sent.";
+  formMessage.style.color = "green";
+  this.reset();
+});
+function updateCartIndicator() {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let count = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  let indicator = document.getElementById('cartCount');
+
+  if (count > 0) {
+    indicator.style.display = "inline-block";
+    indicator.textContent = count;
+  } else {
+    indicator.style.display = "none";
+  }
+}
+document.addEventListener("DOMContentLoaded", updateCartIndicator);
+</script>
+<footer class="footer">
+  <div class="footer__container">
+    <p>&copy; 2025 FoodGoGo. All rights reserved.</p>
+    <nav class="footer__nav">
+      <a href="about.html">About</a>
+      <a href="account.html">Account</a>
+    </nav>
+    <div class="footer__contacts">
+      <p>📞 +7 (747) 708 07 32</p>
+      <p>✉️ arnuredellbaev@gmail.com</p>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>
